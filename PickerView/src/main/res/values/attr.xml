@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="selected_text_size" format="dimension" />
+    <attr name="unselected_text_size" format="dimension" />
+    <attr name="selected_text_color" format="color|reference" />
+    <attr name="unselected_text_color" format="color|reference" />
+    <attr name="text_padding" format="dimension" />
+    <attr name="selected_text_alpha" format="float" />
+    <attr name="unselected_text_alpha" format="float" />
+    <attr name="recycle_data" format="boolean" />
+    <attr name="speed" format="float" />
+    <attr name="margin_inner" format="dimension" />
+    <declare-styleable name="PickerView">
+        <attr name="selected_text_size" />
+        <attr name="unselected_text_size" />
+        <attr name="selected_text_color" />
+        <attr name="unselected_text_color" />
+        <attr name="text_padding" />
+        <attr name="selected_text_alpha" />
+        <attr name="unselected_text_alpha" />
+        <attr name="recycle_data" />
+        <attr name="speed" />
+        <attr name="otherTextNumber" format="integer" />
+    </declare-styleable>
+    <declare-styleable name="DatePicker">
+        <attr name="selected_text_size" />
+        <attr name="unselected_text_size" />
+        <attr name="selected_text_color" />
+        <attr name="unselected_text_color" />
+        <attr name="text_padding" />
+        <attr name="selected_text_alpha" />
+        <attr name="unselected_text_alpha" />
+        <attr name="recycle_data" />
+        <attr name="speed" />
+        <attr name="margin_inner" />
+        <attr name="start_year" format="integer" />
+        <attr name="end_year" format="integer" />
+        <attr name="selected_year" format="integer" />
+        <attr name="selected_month" format="integer" />
+    </declare-styleable>
+</resources>
