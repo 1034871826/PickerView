@@ -1,6 +1,6 @@
 # PickerView
 ```
 dependencies {
-	        implementation 'com.github.1034871826:PickerView:Tag'
+	        implementation 'com.github.1034871826:PickerView:1.2'
 	}
 ```
