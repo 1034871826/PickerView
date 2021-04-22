@@ -1,4 +1,4 @@
-package suyuan.pickerview;
+package jmu.edu.studentmanagementsystem.myview;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import jmu.edu.studentmanagementsystem.R;
+
 /**
  * @author suyuan
  */
@@ -25,7 +27,12 @@ public class DatePicker extends ConstraintLayout {
     private PickerView yearPicker;
     private PickerView monthPicker;
     private PickerView dayPicker;
-    private PickerView.Adapter<String> dayAdapter;
+    private PickerView hourPicker;
+    private PickerView minutePicker;
+    private PickerView.Adapter<Integer> dayAdapter;
+
+    private boolean isShowDate;
+    private boolean isShowTime;
 
     private int startYear = 1970;
     private int endYear = 2050;
@@ -74,15 +81,37 @@ public class DatePicker extends ConstraintLayout {
         yearPicker = findViewById(R.id.year);
         monthPicker = findViewById(R.id.month);
         dayPicker = findViewById(R.id.day);
+        hourPicker = findViewById(R.id.hour);
+        minutePicker = findViewById(R.id.minute);
         getAttribute(context, attrs, defStyleAttr);
-        setPickerAttribute(yearPicker);
-        setPickerAttribute(monthPicker);
-        setPickerAttribute(dayPicker);
+        if (isShowDate) {
+            setPickerAttribute(yearPicker);
+            setPickerAttribute(monthPicker);
+            setPickerAttribute(dayPicker);
+        } else {
+            yearPicker.setVisibility(GONE);
+            monthPicker.setVisibility(GONE);
+            dayPicker.setVisibility(GONE);
+        }
+        if (isShowTime) {
+            setPickerAttribute(hourPicker);
+            setPickerAttribute(minutePicker);
+        } else {
+            hourPicker.setVisibility(GONE);
+            minutePicker.setVisibility(GONE);
+        }
+
+
         LayoutParams monthLayoutParams = (LayoutParams) monthPicker.getLayoutParams();
         monthLayoutParams.setMarginStart(marginInner);
         LayoutParams dayLayoutParams = (LayoutParams) dayPicker.getLayoutParams();
         dayLayoutParams.setMarginStart(marginInner);
+        LayoutParams hourLayoutParams = (LayoutParams) hourPicker.getLayoutParams();
+        hourLayoutParams.setMarginStart(marginInner);
+        LayoutParams minuteLayoutParams = (LayoutParams) minutePicker.getLayoutParams();
+        minuteLayoutParams.setMarginStart(marginInner);
         setDateData();
+        setTimeData();
     }
 
     private void setPickerAttribute(PickerView pickerView) {
@@ -105,6 +134,8 @@ public class DatePicker extends ConstraintLayout {
         selectedYear = typedArray.getInteger(R.styleable.DatePicker_selected_year, 1970);
         selectedMonth = typedArray.getInteger(R.styleable.DatePicker_selected_month, 1);
         marginInner = typedArray.getDimensionPixelSize(R.styleable.DatePicker_margin_inner, 30);
+        isShowDate = typedArray.getBoolean(R.styleable.DatePicker_showDate, true);
+        isShowTime = typedArray.getBoolean(R.styleable.DatePicker_showTime, true);
         //以下是给每个PickerView配置的属性
         int defaultSelectedTextSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 16f, context.getResources().getDisplayMetrics());
         int defaultUnselectedTextSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 12f, context.getResources().getDisplayMetrics());
@@ -118,67 +149,110 @@ public class DatePicker extends ConstraintLayout {
         textPadding = typedArray.getDimensionPixelSize(R.styleable.DatePicker_text_padding, 100);
         isDataRecycled = typedArray.getBoolean(R.styleable.DatePicker_recycle_data, true);
         speed = typedArray.getFloat(R.styleable.DatePicker_speed, 2f);
+        typedArray.recycle();
 
     }
 
     private void setDateData() {
-        List<String> yearList = new ArrayList<>();
-        List<String> monthList = new ArrayList<>();
-        List<String> dayList = new ArrayList<>();
+        List<Integer> yearList = new ArrayList<>();
+        List<Integer> monthList = new ArrayList<>();
+        List<Integer> dayList = new ArrayList<>();
         //添加年份数据
         for (int i = startYear; i <= endYear; i++) {
-            yearList.add(i + "");
+            yearList.add(i);
         }
-        int selectedIndex = yearList.indexOf(selectedYear + "");
-        yearPicker.setAdapter(new PickerView.Adapter<String>(yearList, selectedIndex) {
+        int selectedIndex = yearList.indexOf(selectedYear);
+        yearPicker.setAdapter(new PickerView.Adapter<Integer>(yearList, selectedIndex) {
 
             @Override
-            public String getText(String data, int position) {
-                return data;
+            public String getText(Integer data, int position) {
+                return data.toString();
             }
 
             //每次选中的时候，记录下来当前选中的year和month且同时修改dayPicker的数据
             @Override
-            public void onSelect(String data, int position) {
-                selectedYear = Integer.parseInt(data);
+            public void onSelect(Integer data, int position) {
+                selectedYear = data;
                 updateDayPicker();
             }
         });
         //添加月份数据
         for (int i = 1; i <= 12; i++) {
-            monthList.add(i + "");
+            monthList.add(i);
         }
-        monthPicker.setAdapter(new PickerView.Adapter<String>(monthList) {
+        monthPicker.setAdapter(new PickerView.Adapter<Integer>(monthList) {
 
             @Override
-            public String getText(String data, int position) {
-                return data;
+            public String getText(Integer data, int position) {
+                return data.toString();
             }
 
             @Override
-            public void onSelect(String data, int position) {
-                selectedMonth = Integer.parseInt(data);
+            public void onSelect(Integer data, int position) {
+                selectedMonth = data;
                 updateDayPicker();
             }
         });
         //添加1月的数据，因为默认显示的是1月
         for (int i = 1; i <= 31; i++) {
-            dayList.add(i + "");
+            dayList.add(i);
         }
-        dayAdapter = new PickerView.Adapter<String>(dayList) {
+        dayAdapter = new PickerView.Adapter<Integer>(dayList) {
             @Override
-            public String getText(String data, int position) {
-                return data;
+            public String getText(Integer data, int position) {
+                return data.toString();
             }
 
             @Override
-            public void onSelect(String data, int position) {
+            public void onSelect(Integer data, int position) {
 
             }
         };
         dayPicker.setAdapter(dayAdapter);
 
 
+    }
+
+    private void setTimeData() {
+        List<String> hourList = new ArrayList<>();
+        List<String> minuteList = new ArrayList<>();
+        for (int i = 0; i < 24; i++) {
+            if (i < 10) {
+                hourList.add("0" + i);
+            } else {
+                hourList.add(i + "");
+            }
+
+        }
+        hourPicker.setAdapter(new PickerView.Adapter<String>(hourList) {
+            @Override
+            public String getText(String data, int position) {
+                return data;
+            }
+
+            @Override
+            public void onSelect(String data, int position) {
+
+            }
+        });
+        for (int i = 0; i < 60; i++) {
+            if (i < 10) {
+                minuteList.add("0" + i);
+            } else {
+                minuteList.add(i + "");
+            }
+        }
+        minutePicker.setAdapter(new PickerView.Adapter<String>(minuteList) {
+            @Override
+            public String getText(String data, int position) {
+                return data;
+            }
+
+            @Override
+            public void onSelect(String data, int position) {
+
+            }
+        });
     }
 
     /**
@@ -211,9 +285,9 @@ public class DatePicker extends ConstraintLayout {
                 endDay = 29;
             }
         }
-        List<String> dayList = new ArrayList<>();
+        List<Integer> dayList = new ArrayList<>();
         for (int i = startDay; i <= endDay; i++) {
-            dayList.add(i + "");
+            dayList.add(i);
         }
         dayAdapter.setDataList(dayList);
         dayPicker.reMeasure();
@@ -232,21 +306,39 @@ public class DatePicker extends ConstraintLayout {
     }
 
     public int getYear() {
-        return Integer.parseInt((String) yearPicker.getSelectedData());
+        return (int) yearPicker.getSelectedData();
     }
 
     public int getMonth() {
-        return Integer.parseInt((String) monthPicker.getSelectedData());
+        return (int) monthPicker.getSelectedData();
     }
 
     public int getDay() {
-        return Integer.parseInt((String) dayPicker.getSelectedData());
+        return (int) dayPicker.getSelectedData();
+    }
+
+    public int getHour() {
+        return Integer.parseInt((String) hourPicker.getSelectedData());
+    }
+
+    public int getMinute() {
+        return Integer.parseInt((String) minutePicker.getSelectedData());
     }
 
     public Timestamp getDate() {
         Calendar calendar = Calendar.getInstance();
         calendar.set(getYear(), getMonth(), getDay());
         return new Timestamp(calendar.getTime().getTime());
+    }
+
+    public Timestamp getDateTime() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(getYear(), getMonth(), getDay(), getHour(), getMinute());
+        return new Timestamp(calendar.getTime().getTime());
+    }
+
+    public String getDateTimeString() {
+        return getDateString() + " " + getHour() + ":" + getMinute();
     }
 
     public String getDateString() {

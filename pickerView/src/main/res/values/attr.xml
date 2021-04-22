@@ -37,5 +37,7 @@
         <attr name="end_year" format="integer" />
         <attr name="selected_year" format="integer" />
         <attr name="selected_month" format="integer" />
+        <attr name="showDate" format="boolean" />
+        <attr name="showTime" format="boolean" />
     </declare-styleable>
 </resources>
