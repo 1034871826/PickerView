@@ -1,4 +1,4 @@
-package jmu.edu.studentmanagementsystem.myview;
+package suyuan.pickerview;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import jmu.edu.studentmanagementsystem.R;
 
 /**
  * @author suyuan
