@@ -25,4 +25,18 @@
         app:layout_constraintLeft_toRightOf="@id/month"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <suyuan.pickerview.PickerView
+        android:id="@+id/hour"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toRightOf="@id/day"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <suyuan.pickerview.PickerView
+        android:id="@+id/minute"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toRightOf="@id/hour"
+        app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
