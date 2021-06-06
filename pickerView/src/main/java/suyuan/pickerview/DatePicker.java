@@ -12,7 +12,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -180,8 +179,7 @@ public class DatePicker extends ConstraintLayout {
         for (int i = 1; i <= 12; i++) {
             monthList.add(i);
         }
-        int selectedMonthIndex = monthList.indexOf(selectedMonth);
-        monthPicker.setAdapter(new PickerView.Adapter<Integer>(monthList, selectedMonthIndex) {
+        monthPicker.setAdapter(new PickerView.Adapter<Integer>(monthList, selectedMonth - 1) {
 
             @Override
             public String getText(Integer data, int position) {
@@ -379,4 +377,15 @@ public class DatePicker extends ConstraintLayout {
     public void setSelectedMinute(int minute) {
         minutePicker.getAdapter().setSelectedIndex(minute);
     }
+
+    public void setSelectedMonth(int selectedMonth) {
+        this.selectedMonth = selectedMonth;
+        monthPicker.getAdapter().setSelectedIndex(selectedMonth - 1);
+    }
+
+    public void setSelectedYear(int selectedYear) {
+        this.selectedYear = selectedYear;
+        yearPicker.getAdapter().setSelectedIndex(selectedYear - startYear);
+    }
+
 }
