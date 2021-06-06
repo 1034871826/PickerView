@@ -15,6 +15,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 
@@ -160,8 +161,8 @@ public class DatePicker extends ConstraintLayout {
         for (int i = startYear; i <= endYear; i++) {
             yearList.add(i);
         }
-        int selectedIndex = yearList.indexOf(selectedYear);
-        yearPicker.setAdapter(new PickerView.Adapter<Integer>(yearList, selectedIndex) {
+        int selectedYearIndex = yearList.indexOf(selectedYear);
+        yearPicker.setAdapter(new PickerView.Adapter<Integer>(yearList, selectedYearIndex) {
 
             @Override
             public String getText(Integer data, int position) {
@@ -179,7 +180,8 @@ public class DatePicker extends ConstraintLayout {
         for (int i = 1; i <= 12; i++) {
             monthList.add(i);
         }
-        monthPicker.setAdapter(new PickerView.Adapter<Integer>(monthList) {
+        int selectedMonthIndex = monthList.indexOf(selectedMonth);
+        monthPicker.setAdapter(new PickerView.Adapter<Integer>(monthList, selectedMonthIndex) {
 
             @Override
             public String getText(Integer data, int position) {
@@ -290,18 +292,6 @@ public class DatePicker extends ConstraintLayout {
         }
         dayAdapter.setDataList(dayList);
         dayPicker.reMeasure();
-//        dayPicker.setAdapter(new PickerView.Adapter<String>(dayList) {
-//
-//            @Override
-//            public String getText(String data, int position) {
-//                return data;
-//            }
-//
-//            @Override
-//            public void onSelect(String data, int position) {
-//
-//            }
-//        });
     }
 
     public int getYear() {
@@ -324,23 +314,69 @@ public class DatePicker extends ConstraintLayout {
         return Integer.parseInt((String) minutePicker.getSelectedData());
     }
 
-    public Timestamp getDate() {
+
+    public Date getDate() {
         Calendar calendar = Calendar.getInstance();
-        calendar.set(getYear(), getMonth(), getDay());
-        return new Timestamp(calendar.getTime().getTime());
+        calendar.set(getYear(), getMonth() - 1, getDay(), 0, 0, 0);
+        return calendar.getTime();
     }
 
-    public Timestamp getDateTime() {
+    public Date getDateTime() {
         Calendar calendar = Calendar.getInstance();
-        calendar.set(getYear(), getMonth(), getDay(), getHour(), getMinute());
-        return new Timestamp(calendar.getTime().getTime());
+        calendar.set(getYear(), getMonth() - 1, getDay(), getHour(), getMinute(), 0);
+        return calendar.getTime();
     }
 
     public String getDateTimeString() {
-        return getDateString() + " " + getHour() + ":" + getMinute();
+        String dateTimeString = getDateString() + " ";
+        if (getHour() < 10) {
+            dateTimeString += "0";
+        }
+        dateTimeString += getHour() + ":";
+        if (getMinute() < 10) {
+            dateTimeString += "0";
+        }
+        dateTimeString += getMinute();
+        return dateTimeString;
     }
 
     public String getDateString() {
-        return getYear() + "-" + getMonth() + "-" + getDay();
+        String dateString = getYear() + "-";
+        if (getMonth() < 10) {
+            dateString += "0";
+        }
+        dateString += getMonth() + "-";
+        if (getDay() < 10) {
+            dateString += "0";
+        }
+        dateString += getDay();
+        return dateString;
+    }
+
+    /**
+     * 设置选中的天数，传入的是选中的天数，天数从0开始
+     *
+     * @param day
+     */
+    public void setSelectedDay(int day) {
+        dayPicker.getAdapter().setSelectedIndex(day);
+    }
+
+    /**
+     * 设置选中的hour，hour从0开始到23
+     *
+     * @param hour
+     */
+    public void setSelectedHour(int hour) {
+        hourPicker.getAdapter().setSelectedIndex(hour);
+    }
+
+    /**
+     * 设置选中的minute，minute从0开始到59
+     *
+     * @param minute
+     */
+    public void setSelectedMinute(int minute) {
+        minutePicker.getAdapter().setSelectedIndex(minute);
     }
 }
